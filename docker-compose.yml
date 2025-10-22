@@ -1,0 +1,77 @@
+services:
+  backend:
+    build:
+      context: ./backend
+    container_name: laravel-backend
+    restart: unless-stopped
+    working_dir: /var/www
+    volumes:
+      - ./backend:/var/www
+    ports:
+      - "8000:8000"    # Laravel API
+      - "8080:8080"    # WebSocket Reverb
+    environment:
+      - APP_URL=http://localhost:8000
+      - FRONTEND_URL=http://localhost:3000
+      - DB_HOST=mysql
+      - DB_PORT=3306
+      - DB_DATABASE=laravel_chat
+      - DB_USERNAME=laravel_user
+      - DB_PASSWORD=laravel_password
+      - REDIS_HOST=redis
+    depends_on:
+      - mysql
+      - redis
+    networks:
+      - laravel-network
+
+  frontend:
+    build:
+      context: ./frontend
+    container_name: react-frontend
+    restart: unless-stopped
+    working_dir: /app
+    ports:
+      - "3000:3000"    # React приложение
+    environment:
+      - REACT_APP_API_URL=http://localhost:8000
+      - REACT_APP_WS_URL=ws://localhost:8080
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    networks:
+      - laravel-network
+
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-db
+    restart: unless-stopped
+    environment:
+      MYSQL_DATABASE: laravel_chat
+      MYSQL_USER: laravel_user
+      MYSQL_PASSWORD: laravel_password
+      MYSQL_ROOT_PASSWORD: root_password
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - laravel-network
+
+  redis:
+    image: redis:7-alpine
+    container_name: redis-cache
+    restart: unless-stopped
+    ports:
+      - "6380:6379"
+    networks:
+      - laravel-network
+
+volumes:
+  mysql_data:
+
+networks:
+  laravel-network:
+    driver: bridge
