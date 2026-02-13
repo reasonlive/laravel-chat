@@ -7,14 +7,14 @@
 git clone https://github.com/reasonlive/laravel-chat.git
 cd laravel-chat
 ```
-##### Start application:
+##### Start application with Docker v29.1.5, docker compose v5.0.2:
 ```bash
-docker-compose build
-docker-compose up
+docker compose build
+docker compose up
 ```
 ##### Stop application:
 ```bash
-docker-compose down
+docker compose down
 ```
 
 ##### Application run on http://localhost:3000

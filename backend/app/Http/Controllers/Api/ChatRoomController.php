@@ -20,7 +20,6 @@ class ChatRoomController extends Controller
 
     public function index(Request $request): JsonResponse
     {
-        $user = $request->user();
         $rooms = Room::withStats()->get();
         return $this->successResponse($rooms);
     }

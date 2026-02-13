@@ -18,7 +18,7 @@ if [ ! -f .env ]; then
 fi
 
 echo "Running migrations..."
-php artisan migrate --force
+php artisan migrate:fresh --force
 
 echo "Running seeds..."
 php artisan db:seed

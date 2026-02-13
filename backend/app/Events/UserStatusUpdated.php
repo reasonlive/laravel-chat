@@ -14,7 +14,15 @@ class UserStatusUpdated implements ShouldBroadcastNow, ShouldDispatchAfterCommit
 {
     use Dispatchable, InteractsWithSockets, SerializesModels;
 
-    public function __construct(public User $user) {}
+    public function __construct(public User $user, bool $loggedIn)
+    {
+        $this->user->update([
+            'is_online' => $loggedIn,
+            'last_seen_at' => now(),
+        ]);
+
+        $this->user->refresh();
+    }
 
     public function broadcastOn(): array
     {

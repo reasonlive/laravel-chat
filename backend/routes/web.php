@@ -30,17 +30,3 @@ Route::get('/sanctum/csrf-cookie', function (Request $request) {
         'timestamp' => now()->toISOString(),
     ])->withCookie($cookie);
 });
-
-/*Route::post('/broadcasting/auth', function (Request $request) {
-    if (!auth()->check()) {
-        return response()->json(['error' => 'Unauthenticated'], 401);
-    }
-
-    // Проверяем CSRF токен для WebSocket аутентификации
-    if (!$request->hasHeader('X-CSRF-TOKEN')) {
-
-        return response()->json(['error' => 'CSRF token missing'], 403);
-    }
-
-    return response()->json(['auth' => auth()->user()->getRememberToken()]);
-});*/
